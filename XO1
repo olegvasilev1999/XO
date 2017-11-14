@@ -1,0 +1,135 @@
+# XO
+
+#include <iostream>
+#include <sstream>
+
+using namespace std;
+
+void writetabl(char xo[9]) {
+	cout << "    1   2   3\n"
+		<< "  +---+---+---+\n"
+		<< "a | " << xo[0] << " | " << xo[1] << " | " << xo[2] << " |\n"
+		<< "  +---+---+---+\n"
+		<< "b | " << xo[3] << " | " << xo[4] << " | " << xo[5] << " |\n"
+		<< "  +---+---+---+\n"
+		<< "c | " << xo[6] << " | " << xo[7] << " | " << xo[8] << " |\n"
+		<< "  +---+---+---+\n";
+}
+
+bool whowin(char xo[9], char & winner, bool & success) {
+	if (xo[0] == xo[1] && xo[0] == xo[2] && xo[0] == 'X' ||
+		xo[3] == xo[4] && xo[3] == xo[5] && xo[3] == 'X' ||
+		xo[6] == xo[7] && xo[6] == xo[8] && xo[6] == 'X' ||
+		xo[0] == xo[3] && xo[0] == xo[6] && xo[0] == 'X' ||
+		xo[1] == xo[4] && xo[1] == xo[7] && xo[1] == 'X' ||
+		xo[2] == xo[5] && xo[2] == xo[8] && xo[2] == 'X' ||
+		xo[0] == xo[4] && xo[0] == xo[8] && xo[0] == 'X' ||
+		xo[6] == xo[4] && xo[6] == xo[2] && xo[6] == 'X') {
+		success = true;
+		winner = 'X';
+	}
+	else if (xo[0] == xo[1] && xo[0] == xo[2] && xo[0] == 'O' ||
+		xo[3] == xo[4] && xo[3] == xo[5] && xo[3] == 'O' ||
+		xo[6] == xo[7] && xo[6] == xo[8] && xo[6] == 'O' ||
+		xo[0] == xo[3] && xo[0] == xo[6] && xo[0] == 'O' ||
+		xo[1] == xo[4] && xo[1] == xo[7] && xo[1] == 'O' ||
+		xo[2] == xo[5] && xo[2] == xo[8] && xo[2] == 'O' ||
+		xo[0] == xo[4] && xo[0] == xo[8] && xo[0] == 'O' ||
+		xo[6] == xo[4] && xo[6] == xo[2] && xo[6] == 'O') {
+		success = true;
+		winner = 'O';
+	}
+
+	return success;
+}
+
+bool ifdraw(char xo[9], bool & draw) {
+	int n = 0;
+	for (int i = 0; i < 9; i++) {
+		if (xo[i] != ' ') n++;
+	}
+
+	if (n == 9) draw = true;
+
+	return draw;
+}
+
+
+int main()
+{
+	bool hw = false, draw = false;
+	char xo[9], winner;
+	string name[9], names[9];
+	names[0] = "a1"; names[1] = "a2"; names[2] = "a3";
+	names[3] = "b1"; names[4] = "b2"; names[5] = "b3";
+	names[6] = "c1"; names[7] = "c2"; names[8] = "c3";
+
+	for (int i = 0; i < 9; i++) {
+		xo[i] = ' ';
+		name[i] = "";
+	}
+
+
+	writetabl(xo);
+	int  y = 1;
+
+	do {
+		int j = 0, tmp = 1;
+		for (int i = 0; i < 9; i++) {
+
+			if (xo[i] == ' ') {
+				j++;
+				cout << j << ". mark cell ";
+				tmp = i / 3;
+				switch (tmp) {
+				case 0: cout << 'a'; break;
+				case 1: cout << 'b'; break;
+				case 2: cout << 'c'; break;
+				}
+				tmp = i % 3;
+				switch (tmp) {
+				case 0: cout << '1' << " as "; break;
+				case 1: cout << '2' << " as "; break;
+				case 2: cout << '3' << " as "; break;
+				}
+
+				if (y == 1)  cout << "X\n";
+				else  cout << "O\n";
+			}
+		}
+		cout << j + 1 << ". quit\n";
+		j = 0;
+		int number;
+		cin >> number;
+		for (int i = 0; i < 9; i++) {
+			if (xo[i] == ' ') {
+				j++;
+				if (number == j && y == 1) { xo[i] = 'X'; y--; break; }
+				else if (number == j && y == 0) {
+					xo[i] = 'O'; y++; break;
+				}
+			}
+		}
+
+			writetabl(xo);
+
+			hw = whowin(xo, winner, hw);
+			
+			if (hw) {
+				cout << "player " << winner << " wonn.";
+				break;
+			}
+			draw = ifdraw(xo, draw);
+			if (draw) {
+				cout << "draw";
+				break;
+			}
+
+
+	} while (!hw);
+
+	cin.get();
+	cin.get();
+	return 0;
+}
+
